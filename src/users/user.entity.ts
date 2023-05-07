@@ -2,7 +2,7 @@ import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
 
 @Entity({name: "users"}) // name of the table in the database 
 export class User {
-    @PrimaryGeneratedColumn() // transforms into a column in the database
+    @PrimaryGeneratedColumn() // transforms into a column in the database, also since this is primary generated, it will create incrementing numbers for each user
     id: number // typescript type
 
     @Column({unique: true}) 
