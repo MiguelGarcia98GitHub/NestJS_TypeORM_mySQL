@@ -4,6 +4,9 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import {TypeOrmModule} from "@nestjs/typeorm"
 import { ConfigModule, ConfigService } from '@nestjs/config';
+//import { User } from './users/user.entity';
+import { join } from 'path';
+import { User } from './users/user.entity';
 
 
 @Module({
@@ -16,23 +19,25 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         // check that .env variables are being injected successfully
-        console.log('host:', configService.get<string>('host'));
-        console.log('port:', configService.get<number>('port'));
-        console.log('dbusername:', configService.get<string>('dbusername'));
-        console.log('dbpassword:', configService.get<string>('dbpassword'));
         console.log('database:', configService.get<string>('database'));
+        console.log('dbusername:', configService.get<string>('dbusername'));
+        console.log('host:', configService.get<string>('host'));
+        console.log('dbpassword:', configService.get<string>('dbpassword'));
+        console.log('port:', configService.get<number>('port'));
+        console.log('dirname:', __dirname + "**/*.entity.js")
 
         return {
           type: 'mysql',
-          host: configService.get<string>('host'),
-          port: configService.get<number>('port'),
-          username: configService.get<string>('dbusername'),
-          password: configService.get<string>('dbpassword'),
           database: configService.get<string>('database'),
-          synchronize: true,
+          username: configService.get<string>('dbusername'),
+          host: configService.get<string>('host'),
+          password: configService.get<string>('dbpassword'),
+          port: configService.get<number>('port'),
           ssl: {
             rejectUnauthorized: false
-          }
+          },
+          entities: [User],
+          synchronize: true,
         };
       }
     }),
