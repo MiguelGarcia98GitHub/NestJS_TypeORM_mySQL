@@ -4,6 +4,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+//import { User } from './users/user.entity';
 import { User } from './users/user.entity';
 
 @Module({
@@ -16,6 +17,11 @@ import { User } from './users/user.entity';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         // check that .env variables are being injected successfully
+        console.log('database:', configService.get<string>('database'));
+        console.log('dbusername:', configService.get<string>('dbusername'));
+        console.log('host:', configService.get<string>('host'));
+        console.log('dbpassword:', configService.get<string>('dbpassword'));
+        console.log('port:', configService.get<number>('port'));
 
         return {
           type: 'mysql',
