@@ -1,19 +1,14 @@
-import {Entity, Column, PrimaryGeneratedColumn} from "typeorm";
-
-@Entity({name: "users"}) // name of the table in the database 
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+@Entity({ name: 'users' })
 export class User {
-    @PrimaryGeneratedColumn() // transforms into a column in the database, also since this is primary generated, it will create incrementing numbers for each user
-    id: number // typescript type
-
-    @Column({unique: true}) 
-    username: string
-    
-    @Column()
-    password: string
-    
-    @Column({type: "datetime", default: () => "CURRENT_TIMESTAMP"})
-    createdAt: Date
-    
-    @Column({nullable: true})
-    authStrategy: string
+  @PrimaryGeneratedColumn()
+  id: number;
+  @Column({ unique: true })
+  username: string;
+  @Column()
+  password: string;
+  @Column({ type: 'datetime', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
+  @Column({ nullable: true })
+  authStrategy: string;
 }
