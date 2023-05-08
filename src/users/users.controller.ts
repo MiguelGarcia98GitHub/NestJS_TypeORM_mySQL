@@ -1,7 +1,8 @@
-import { Controller, Post, Body, Get, Delete, Param, ParseIntPipe } from '@nestjs/common'; // body is the req.body that will come from a client request
+import { Controller, Post, Body, Get, Delete, Patch, Param, ParseIntPipe } from '@nestjs/common'; // body is the req.body that will come from a client request
 import { CreateUserDto } from './dto/createUser.dto';
 import { UsersService } from './users.service';
 import { User } from './user.entity';
+import { updateUserDto } from './dto/updateUser.dto';
 
 @Controller('users')
 export class UsersController {
@@ -26,4 +27,10 @@ export class UsersController {
   deleteUser(@Param("id", ParseIntPipe) id: number) {
     return this.usersService.deleteUser(id);
   }
+
+  @Patch(":id")
+  updateUser(@Param("id", ParseIntPipe) id: number, @Body() user: updateUserDto) {
+    return this.usersService.updateUser(id, user);
+  }
+
 }
