@@ -5,14 +5,15 @@ import { Repository } from 'typeorm';
 import { CreateUserDto } from './dto/createUser.dto';
 import { updateUserDto } from './dto/updateUser.dto';
 import {HttpStatus} from '@nestjs/common'
+import { CreateProfileDto } from './dto/createProfile.dto';
+import { Profile } from './profile.entity';
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private userRepository: Repository<User>,
+    @InjectRepository(Profile) private profileRepository: Repository<Profile>
   ) {}
-
-
 
   getUsers(): Promise<User[]> {
     return this.userRepository.find()
@@ -89,5 +90,24 @@ export class UsersService {
    return this.userRepository.save(updatedUser);
   }
 
+  // this could be created in another service, but for simplicity, we'll just put it here
+  async createProfile(id: number, profile: CreateProfileDto ) {
+   const userFound = await this.userRepository.findOne({
+      where: {
+        id
+      }
+    })
 
+    if (!userFound) {
+      throw new HttpException('User not found', HttpStatus.NOT_FOUND)
+    }
+
+    const newProfile = this.profileRepository.create(profile);
+    const savedProfile = await this.profileRepository.save(newProfile)
+    userFound.profile = savedProfile;
+
+    return this.userRepository.save(userFound);
+  }
+
+ 
 }

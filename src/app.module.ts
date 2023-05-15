@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 //import { User } from './users/user.entity';
 import { User } from './users/user.entity';
+import { Profile } from './users/profile.entity';
 
 @Module({
   imports: [
@@ -17,28 +18,31 @@ import { User } from './users/user.entity';
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         // check that .env variables are being injected successfully
+               // check that .env variables are being injected successfully
+        console.log('host_name:', configService.get<string>('host_name'));
         console.log('database:', configService.get<string>('database'));
-        console.log('dbusername:', configService.get<string>('dbusername'));
-        console.log('host:', configService.get<string>('host'));
-        console.log('dbpassword:', configService.get<string>('dbpassword'));
+        console.log('user_name:', configService.get<string>('user_name'));
+        console.log('password:', configService.get<string>('password'));
         console.log('port:', configService.get<number>('port'));
 
         return {
           type: 'mysql',
+          host: configService.get<string>('host_name'),
           database: configService.get<string>('database'),
-          username: configService.get<string>('dbusername'),
-          host: configService.get<string>('host'),
-          password: configService.get<string>('dbpassword'),
+          username: configService.get<string>('user_name'),
+          password: configService.get<string>('password'),
           port: configService.get<number>('port'),
-          ssl: {
-            rejectUnauthorized: false,
-          },
-          entities: [User],
+          // ssl: {
+          //   rejectUnauthorized: false,
+          // },
+          entities: [User, Profile],
           synchronize: true,
         };
       },
     }),
+    // after db setup, import the actual modules being used
     UsersModule,
+    
   ],
   controllers: [AppController],
   providers: [AppService],
