@@ -9,5 +9,7 @@ import { Profile } from './profile.entity';
   imports: [TypeOrmModule.forFeature([User, Profile])], // to indicate that this module will use the User entity
   controllers: [UsersController],
   providers: [UsersService],
+  exports: [UsersService]
 })
+
 export class UsersModule {}

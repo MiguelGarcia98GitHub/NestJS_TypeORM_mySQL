@@ -16,7 +16,9 @@ export class UsersService {
   ) {}
 
   getUsers(): Promise<User[]> {
-    return this.userRepository.find()
+    return this.userRepository.find({
+      relations: ["posts", "profile"]
+    })
   }
 
   async getUser(id: number): Promise<User> {
@@ -34,6 +36,11 @@ export class UsersService {
   }
 
   async createUser(user: CreateUserDto): Promise<User> {
+    if (!user.password || !user.username) {
+      throw new HttpException('Username and password are required', HttpStatus.BAD_REQUEST)
+
+    }
+
     const userFound = await this.userRepository.findOne({
     where: {
       username: user.username
@@ -43,6 +50,8 @@ export class UsersService {
     if (userFound) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST)
     }
+
+    
 
     const newUser = this.userRepository.create(user);
     return this.userRepository.save(newUser); // this line of code is async, return will just return a promise here
